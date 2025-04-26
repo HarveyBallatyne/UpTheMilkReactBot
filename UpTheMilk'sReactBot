@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Google Drive Audio Player</title>
+</head>
+<body>
+
+<h1>Random File Player (Google Drive)</h1>
+
+<p id="file-name">Loading...</p>
+
+<audio id="audio-player" controls>
+  <source id="audio-source" src="" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<button onclick="getRandomFile()">Play Another Random Song</button>
+
+<script>
+// === List your public Google Drive file links ===
+const files = [
+  { name: "Brisbane Broncos.mp3", url: "https://drive.google.com/file/d/1DJ0tWWC68XMeLfPrUkfOBnZ7qOl6Tszk/view?usp=drive_link" },
+  { name: "Canberra Raiders.mp3", url: "https://drive.google.com/file/d/14aguQ-fxElIdtyFBOEw_5g0wW_p4-OEo/view?usp=drive_link" },
+  { name: "Cronulla Sharks.mp3", url: "https://drive.google.com/file/d/1PxqmjKNCmKluLPVDJyqO16N8VqmYy3DP/view?usp=drive_link" },
+  { name: "Dolphins.mp3", url: "https://drive.google.com/file/d/1Ps-0IumdpikydeFFSsQiWF8D63T8BcAC/view?usp=drive_link" },
+  { name: "F The Panthers.mp3", url: "https://drive.google.com/file/d/1X-0h1KuiPz9SL_rMNr36Wt_WuxYgK-b1/view?usp=drive_link" },
+  { name: "Glory, Glory South Sydney.mp3" url: "https://drive.google.com/file/d/1pCXaiD7702wJIySZ_O3TT6w1wObmVMr3/view?usp=drive_link" },
+  { name: "Gold Coast Titans.mp3", url: "https://drive.google.com/file/d/1ndX8oOD-UnWREIi5OT9zpB2vuDbzmfmz/view?usp=drive_link" },
+  { name: "Manly.mp3", url: "https://drive.google.com/file/d/13UaAjq-0Syhp07xWwwU-0CUXNRJQ6ajP/view?usp=drive_link" },
+  { name: "Storm.mp3", url: "https://drive.google.com/file/d/1t-mJ0PwDK7hXZxhRM2afUlY5aU3NyK7G/view?usp=drive_link" },
+  { name: "Warriors.mp3", url: "https://drive.google.com/file/d/11FasZNFLlKA2SgxQ01fh6gVMzMpDCu4k/view?usp=drive_link" },
+  { name: "Poohcastle Knights.mp3", url: "https://drive.google.com/file/d/1n3bp4-b7ATdOO6zgDXGHHKriWWFUQ4pw/view?usp=drive_link" },
+  { name: "Cowboys.mp3", url: "https://drive.google.com/file/d/1S6wt4wkgr8ZHnMLV38SzEi8lyLJps4su/view?usp=drive_link" },
+  { name: "Parramatta Eels.mp3", url: "https://drive.google.com/file/d/1cY5oNqlGM4ji4GECvqIvTnAg1_fcTmcE/view?usp=drive_link" },
+  { name: "Penrith Panthers.mp3", url: "https://drive.google.com/file/d/1o5wZ4oET-Gr2Lm0uDBrxqHG_sqb0zrgw/view?usp=drive_link" },
+  { name: "Phins Up.mp3", url: https://drive.google.com/file/d/1vhSN4Qckh0AP1tLQAU7TKERepKSKyAyy/view?usp=drive_link" },
+  { name: "Rabbitohs.mp3", url: "https://drive.google.com/file/d/1keyOG_UmNVVbIuLFdvP366j-BSCymgfh/view?usp=drive_link" },
+  { name: "dargons.mp3", url: "https://drive.google.com/file/d/1kNueH8avkUPoJiBJizt0CPMYvvpB66Te/view?usp=drive_link" },
+  { name: "Roosters.mp3", url: "https://drive.google.com/file/d/1vydrtlEaQXplwKeNgGMvxnMrs7dJhkov/view?usp=drive_link" },
+  { name: "Doggies.mp3", url: "https://drive.google.com/file/d/1DDQ0TWwy5of9983Sbu5JVsiRAmTANFfg/view?usp=drive_link" },
+  { name: "Up The Milk.mp3", url: "https://drive.google.com/file/d/1s6bDgE3jXCstbjo5udz7PyJh1194YROi/view?usp=drive_link" },
+  { name: "Up The Wahs.mp3", url: "https://drive.google.com/file/d/143XYg6UCF2ikkoCaFlt77C7Y7SOCYbvJ/view?usp=drive_link" },
+  { name: "Western Bears.mp3", url: "https://drive.google.com/file/d/1l6JXkEbcbjqom5yp3aMfREwK5vTEuYPS/view?usp=drive_link" },
+  { name: "Wests Tigers.mp3", url: "https://drive.google.com/file/d/1I0P3p4pQ1CaBgR-8Gh1HoaUe-8FlzOEK/view?usp=drive_link" },
+  { name: "Big Bucks.mp3", url: "https://drive.google.com/file/d/1EsZIaUODE84SuYw9ztQ2k37VcdLWc1is/view?usp=drive_link },
+ { name: "Thurtson.mp3", url: "hhttps://drive.google.com/file/d/1-FbsGeSO_grB7DUtw-rSUT9E8Nl_MMhq/view?usp=drive_link" },
+  { name: "Try.mp3", url: "https://drive.google.com/file/d/1hGMwBzjpLpy2RFYH6DmkC8K6A-YRsNok/view?usp=drive_link" },
+  { name: "No Try.mp3", url: "https://drive.google.com/file/d/1xpCyi_GKPAQqKFfC6lFB-NePdRPH3apH/view?usp=drive_link" },
+  { name: "Billy Slater.mp3", url: "https://drive.google.com/file/d/11zCQgeUDy_3zxaVV_tMjHJsM9efxW0Uy/view?usp=drive_link" },
+  { name: "Jamal Fogarty.mp3", url: "https://drive.google.com/file/d/1QwFYzN2oZMEFX3ivTFkPOgdqEIWiDrWb/view?usp=drive_link" },
+  { name: "Nathan Cleary.mp3", url: "https://drive.google.com/file/d/19jAZdb83tnmPOdNJ_c3JciKDzmLJMoiR/view?usp=drive_link" },
+  { name: "Penalty.mp3", url: "https://drive.google.com/file/d/1JpHdxpxh3S9jvcBQvsqDgZIdc_KtAlLF/view?usp=drive_link" },
+  { name: "Yellow Line.mp3", url: "https://drive.google.com/file/d/1CtvpEwrSZPq9gHWWpIiEYp3w2vCsvoNO/view?usp=drive_link" },
+ 
+];
+
+// === Function to pick and play a random file ===
+function getRandomFile() {
+  if (files.length === 0) {
+    document.getElementById('file-name').textContent = 'No audio files available.';
+    return;
+  }
+
+  const randomFile = files[Math.floor(Math.random() * files.length)];
+  
+  document.getElementById('file-name').textContent = `Now playing: ${randomFile.name}`;
+  document.getElementById('audio-source').src = randomFile.url;
+
+  const audioPlayer = document.getElementById('audio-player');
+  audioPlayer.load();
+  audioPlayer.play()
+    .catch(error => {
+      console.error('Autoplay failed:', error);
+      document.getElementById('file-name').textContent = 'Click play to start the music.';
+    });
+}
+
+// === Play random file when page loads ===
+window.addEventListener('load', getRandomFile);
+</script>
+
+</body>
+</html>
